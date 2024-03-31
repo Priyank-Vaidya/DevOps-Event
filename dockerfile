@@ -4,7 +4,7 @@ WORKDIR ./myapp
 
 COPY . .
 
-RUN npm install express
+RUN npm install express nodemon
 
 EXPOSE 3000
 

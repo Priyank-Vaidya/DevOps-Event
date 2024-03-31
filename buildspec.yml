@@ -1,3 +1,5 @@
+# Use this yml only if you are building pipeline using AWS CodePipeline
+
 version: 0.2
 
 phases:

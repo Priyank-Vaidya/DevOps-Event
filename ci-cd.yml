@@ -1,0 +1,33 @@
+name: Docker CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Build Docker image
+        run: |
+          docker build -t registry-url/your-image-name:tag .
+          docker push registry-url/your-image-name:tag
+
+      - name: Deploy to AWS CodeDeploy
+        uses: aws-actions/aws-codedeploy-github-deploy@v2
+        with:
+          application-name: YourApplicationName
+          deployment-group-name: YourDeploymentGroupName
+          region: ${{ secrets.AWS_REGION }}
+          image-definitions: '{"container-image-definitions":[{"name":"your-container-name","imageUri":"registry-url/your-image-name:tag"}]}'
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
